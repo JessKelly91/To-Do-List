@@ -27,12 +27,13 @@ form.addEventListener("submit", function(event){
     let newButton = document.createElement("button");
     newButton.innerText = "Remove";
 
+    savedTodos.push({task: newLi.innerText, isCompleted: false});
+
     newLi.append(newButton);
     todoList.append(newLi);
 
     form.reset();
     
-    savedTodos.push({task: newLi.innerText, isCompleted: false});
 
     updateLocalStorage();
 
@@ -56,7 +57,7 @@ todoList.addEventListener("click", function(event){
             }
         }
 
-        // updateLocalStorage();
+        updateLocalStorage();
     }
 )
 
