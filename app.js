@@ -1,21 +1,51 @@
 const form = document.querySelector("form");
-const todoList = document.querySelector(".todoList")
+const todoList = document.querySelector(".todoList");
 
-const savedTodos = [];
+let savedTodos = JSON.parse(localStorage.getItem("toDos")) || [];
 
-// JSON.parse(localStorage.getItem("toDos")) || [];
+function renderTodos(){
+    todoList.innerHTML = "";
 
-for(let i = 0; i< savedTodos.length; i++){
+    for(let i = 0; i< savedTodos.length; i++){
+        const todo = savedTodos[i];
+
         let newTodo = document.createElement("li");
-        newTodo.innerText = savedTodos.task[i];
+        newTodo.innerText = todo.task;
+
+        newTodo.setAttribute("data-index", i);
+
+        if (todo.isCompleted){
+            newTodo.style.textDecorationLine = "line-through";
+        }
+
+        
+        newTodo.addEventListener("click", function(){
+            const index = parseInt(newTodo.getAttribute("data-index"));
+
+            savedTodos[index].isCompleted = !savedTodos[index].isCompleted;
+
+            updateLocalStorage();
+            renderTodos();
+        });
 
         let newButton = document.createElement("button");
         newButton.innerText = "Remove";
+
+        newButton.addEventListener("click", function() {
+            const index = parseInt(newTodo.getAttribute("data-index"));
+
+            savedTodos.splice(index, 1);
+            
+            updateLocalStorage();
+            renderTodos(); 
+          });
         
         newTodo.append(newButton);
         todoList.append(newTodo);
     }
+}
 
+renderTodos();
 
 
 form.addEventListener("submit", function(event){
@@ -26,10 +56,29 @@ form.addEventListener("submit", function(event){
     let newLi = document.createElement("li");
     newLi.innerText = newTodoItem.value;
 
+    savedTodos.push({task: newLi.innerText, isCompleted: false});
+
+    newLi.addEventListener("click", function(){
+        const index = parseInt(newLi.getAttribute("data-index"));
+
+        savedTodos[index].isCompleted = !savedTodos[index].isCompleted;
+
+        updateLocalStorage();
+        renderTodos();
+    });
+
+    
     let newButton = document.createElement("button");
     newButton.innerText = "Remove";
+    
+    newButton.addEventListener("click", function(){
+        const index = parseInt(newLi.getAttribute("data-index"));
 
-    savedTodos.push({task: newLi.innerText, isCompleted: false});
+        savedTodos.splice(index, 1);
+
+        updateLocalStorage();
+        renderTodos();
+    });
 
     newLi.append(newButton);
     todoList.append(newLi);
@@ -38,27 +87,8 @@ form.addEventListener("submit", function(event){
 
     updateLocalStorage();
     
-})
+});
 
-todoList.addEventListener("click", function(event){
-        if(event.target.tagName === "BUTTON"){
-            event.target.parentElement.remove();
-        }
-
-        else if(event.target.tagName === 'LI'){
-            if(event.target.style.textDecorationLine === ""){
-                event.target.style.textDecorationLine = "line-through";
-                //I can't figure out how to update this in the savedTodos and push to the localStorage
-                //  event.target.isCompleted = true;
-            }
-            else if(event.target.style.textDecorationLine === "line-through"){
-                event.target.style.textDecorationLine = "";
-                // same here
-                // event.target.isCompleted = false;
-            }
-        }
-    }
-)
 
 function updateLocalStorage(){
     localStorage.setItem('toDos', JSON.stringify(savedTodos));
