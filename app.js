@@ -35,6 +35,8 @@ form.addEventListener("submit", function(event){
     todoList.append(newLi);
 
     form.reset();
+
+    updateLocalStorage();
     
 })
 
@@ -46,15 +48,15 @@ todoList.addEventListener("click", function(event){
         else if(event.target.tagName === 'LI'){
             if(event.target.style.textDecorationLine === ""){
                 event.target.style.textDecorationLine = "line-through";
-                // savedTodos[target.isCompleted] = true;
+                //I can't figure out how to update this in the savedTodos and push to the localStorage
+                //  event.target.isCompleted = true;
             }
             else if(event.target.style.textDecorationLine === "line-through"){
                 event.target.style.textDecorationLine = "";
-                // savedTodos[target.isCompleted] = false;
+                // same here
+                // event.target.isCompleted = false;
             }
         }
-
-        updateLocalStorage();
     }
 )
 
