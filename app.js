@@ -1,17 +1,19 @@
 const form = document.querySelector("form");
 const todoList = document.querySelector(".todoList")
 
-const savedTodos = JSON.parse(localStorage.getItem("toDos")) || [];
+const savedTodos = [];
+
+// JSON.parse(localStorage.getItem("toDos")) || [];
 
 for(let i = 0; i< savedTodos.length; i++){
         let newTodo = document.createElement("li");
-        newTodo.innerText = savedTodos[i];
+        newTodo.innerText = savedTodos.task[i];
 
         let newButton = document.createElement("button");
         newButton.innerText = "Remove";
         
         newTodo.append(newButton);
-        todoList.appendChild(newTodo);
+        todoList.append(newTodo);
     }
 
 
@@ -34,9 +36,6 @@ form.addEventListener("submit", function(event){
 
     form.reset();
     
-
-    updateLocalStorage();
-
 })
 
 todoList.addEventListener("click", function(event){
@@ -45,15 +44,13 @@ todoList.addEventListener("click", function(event){
         }
 
         else if(event.target.tagName === 'LI'){
-            let clickedListItem = event.target;
-
             if(event.target.style.textDecorationLine === ""){
                 event.target.style.textDecorationLine = "line-through";
-                clickedListItem.isCompleted = true;
+                // savedTodos[target.isCompleted] = true;
             }
             else if(event.target.style.textDecorationLine === "line-through"){
                 event.target.style.textDecorationLine = "";
-                clickedListItem.isCompleted = false;
+                // savedTodos[target.isCompleted] = false;
             }
         }
 
